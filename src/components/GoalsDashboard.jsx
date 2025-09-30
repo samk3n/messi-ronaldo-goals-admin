@@ -62,7 +62,7 @@ const GoalsDashboard = () => {
         }
         return 1;
     });
-    const [goToPage, setGoToPage] = useState(currentPage)
+    const [goToPage, setGoToPage] = useState(String(currentPage))
     // --- 2. Add state for our filters ---
     const [playerFilter, setPlayerFilter] = useState(() => {
         const savedFilters = localStorage.getItem(FILTERS_STORAGE_KEY);
@@ -97,7 +97,7 @@ const GoalsDashboard = () => {
     });
 
     useEffect(() => {
-        setGoToPage(currentPage)
+        setGoToPage(String(currentPage))
     }, [currentPage])
 
     useEffect(() => {
@@ -173,12 +173,13 @@ const GoalsDashboard = () => {
                         type="number"
                         name="goToPage"
                         value={goToPage}
-                        onChange={(e) => setGoToPage(Number(e.target.value))}
+                        onChange={(e) => setGoToPage(e.target.value)}
                     />
                     <Button variant="contained"
                         onClick={(e) => {
-                            if (goToPage >= 1 && goToPage <= pageCount) {
-                                handlePageChange(e, goToPage)
+                            const pageNum = parseInt(goToPage, 10);
+                            if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= pageCount) {
+                                handlePageChange(e, pageNum);
                             }
                         }}
                         disabled={goToPage === currentPage || goToPage < 1 || goToPage > pageCount}

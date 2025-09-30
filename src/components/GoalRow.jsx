@@ -36,6 +36,12 @@ const generateMinuteOptions = () => {
 };
 const minuteOptions = generateMinuteOptions();
 
+// --- Define options for the 'type' select input ---
+const GOAL_TYPE_OPTIONS = [
+    'right_foot', 'left_foot', 'header', 'penalty',
+    'free_kick', 'other', 'chest', 'leg'
+];
+
 // --- The Mutation Function ---
 // This async function takes the updated goal data and sends it to Supabase.
 const updateGoal = async (updatedGoal) => {
@@ -117,7 +123,22 @@ const EditGoalForm = ({ goal, onSave, isSaving }) => {
                 </FormControl>
 
                 {/* Row 4 */}
-                <TextField label="Type" name="type" value={formData.type || ''} onChange={handleChange} variant="standard" />
+                <FormControl variant="standard">
+                    <InputLabel id="type-select-label">Type</InputLabel>
+                    <Select
+                        labelId="type-select-label"
+                        name="type"
+                        value={formData.type || ''}
+                        onChange={handleChange}
+                    >
+                        {GOAL_TYPE_OPTIONS.map(type => (
+                            <MenuItem key={type} value={type}>
+                                {/* Capitalize first letter and replace underscore for readability */}
+                                {(type.charAt(0).toUpperCase() + type.slice(1)).replace('_', ' ')}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <TextField label="Assist" name="assist" value={formData.assist || ''} onChange={handleChange} variant="standard" />
                 <TextField label="Team Rank" name="team_ranked" value={formData.team_ranked || ''} onChange={handleChange} variant="standard" />
                 <TextField label="Opponent Rank" name="opponent_rank" value={formData.opponent_rank || ''} onChange={handleChange} variant="standard" />
